@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "suika_server",
+  "version": "${version}",
+  "name": "Suika",
+  "description": "我也不知道有什么",
+  "authors": [
+    "forpleuvoir"
+  ],
+  "contact": {
+    "website": "null"
+  },
+  "license": "MIT",
+  "icon": "assets/suika_server/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.forpleuvoir.suika.server.Suika"
+    ]
+  },
+  "mixins": [
+    "suika_server.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.1",
+    "fabric": "*",
+    "minecraft": "1.16.5"
+  }
+}
