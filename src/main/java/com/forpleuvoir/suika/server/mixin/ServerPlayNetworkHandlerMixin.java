@@ -1,13 +1,13 @@
 package com.forpleuvoir.suika.server.mixin;
 
-import net.minecraft.SharedConstants;
-import net.minecraft.client.options.ChatVisibility;
+import net.minecraft.client.option.ChatVisibility;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.MessageType;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.GameMessageS2CPacket;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.filter.TextStream;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
@@ -56,27 +56,20 @@ public abstract class ServerPlayNetworkHandlerMixin {
     private int messageCooldown;
 
     @Inject(method = "method_31286", at = @At("HEAD"), cancellable = true)
-    public void method_31286(String message, CallbackInfo ci) {
-
+    public void method_31286(TextStream.Message arg, CallbackInfo ci) {
         if (this.player.getClientChatVisibility() == ChatVisibility.HIDDEN) {
-            sendPacket(new GameMessageS2CPacket((new TranslatableText("chat.cannotSend")).formatted(Formatting.RED), MessageType.SYSTEM, Util.NIL_UUID));
+            this.sendPacket(new GameMessageS2CPacket((new TranslatableText("chat.disabled.options")).formatted(Formatting.RED), MessageType.SYSTEM, Util.NIL_UUID));
         } else {
             this.player.updateLastActionTime();
-
-            for (int i = 0; i < message.length(); ++i) {
-                if (!SharedConstants.isValidChar(message.charAt(i))) {
-                    disconnect(new TranslatableText("multiplayer.disconnect.illegal_characters"));
-                    return;
-                }
-            }
-
-            if (message.startsWith("/")) {
-                executeCommand(message);
+            String string = arg.getRaw();
+            if (string.startsWith("/")) {
+                this.executeCommand(string);
             } else {
-                message = message.replace("&", "§");
+                String string2 = arg.getFiltered();
+                string2 = string2.replace("&", "§");
                 MutableText mutableText = new LiteralText("");
-                if (message.contains("[i]")) {
-                    String[] s = message.split("\\[i]", -1);
+                if (string2.contains("[i]")) {
+                    String[] s = string2.split("\\[i]", -1);
                     for (int i = 0; i < s.length; i++) {
                         mutableText.append(s[i]);
                         if (i != s.length - 1) {
@@ -89,18 +82,22 @@ public abstract class ServerPlayNetworkHandlerMixin {
                         }
                     }
                 } else {
-                    mutableText.append(message);
+                    mutableText.append(string2);
                 }
-                MutableText text = new TranslatableText("chat.type.text", this.player.getDisplayName(), mutableText);
-                this.server.getPlayerManager().broadcastChatMessage(text, MessageType.CHAT, this.player.getUuid());
+                Text text = string2.isEmpty() ? null : new TranslatableText("chat.type.text", new Object[]{this.player.getDisplayName()}).append(mutableText);
+                Text text2 = new TranslatableText("chat.type.text", new Object[]{this.player.getDisplayName()}).append(mutableText);
+
+                this.server.getPlayerManager().broadcast(text2, (serverPlayerEntity) ->
+                        this.player.shouldFilterMessagesSentTo(serverPlayerEntity) ? text : text2, MessageType.CHAT, this.player.getUuid()
+                );
             }
+
             this.messageCooldown += 20;
             if (this.messageCooldown > 200 && !this.server.getPlayerManager().isOperator(this.player.getGameProfile())) {
                 this.disconnect(new TranslatableText("disconnect.spam"));
             }
 
         }
-        //覆盖原本的方法
         ci.cancel();
     }
 }

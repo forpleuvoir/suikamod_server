@@ -7,8 +7,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.ClickEvent;
@@ -66,10 +66,10 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
             //如果攻击者是玩家 则有可能掉落头颅
             //基础概率
             float baseProbability = 5.0f;
-            ListTag enchantments = ((PlayerEntity) attacker).getMainHandStack().getEnchantments();
+            NbtList enchantments = ((PlayerEntity) attacker).getMainHandStack().getEnchantments();
             if (!enchantments.isEmpty()) {
                 for (int i = 0; i < enchantments.size(); i++) {
-                    CompoundTag compoundTag = enchantments.getCompound(i);
+                    NbtCompound compoundTag = enchantments.getCompound(i);
                     String str = compoundTag.getString("id");
                     //如果附魔是抢夺增加掉落头颅的几率
                     if (str.split(":")[1].equals("looting")) {

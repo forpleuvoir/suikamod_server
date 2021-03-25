@@ -18,6 +18,8 @@ public class ServerCommand {
         WarpCommand.register(dispatcher);
         BackCommand.register(dispatcher);
         TpaCommand.register(dispatcher);
+        PlayerCommand.register(dispatcher);
+        SuicideCommand.register(dispatcher);
     }
 
 }

@@ -6,8 +6,8 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtString;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 
@@ -25,8 +25,8 @@ public class PlayerHeadUtil {
 
     public static ItemStack getPlayerHead(String playerName) {
         ItemStack stack = new ItemStack(Items.PLAYER_HEAD);
-        CompoundTag tag = new CompoundTag();
-        tag.put("SkullOwner", StringTag.of(playerName));
+        NbtCompound tag = new NbtCompound();
+        tag.put("SkullOwner", NbtString.of(playerName));
         stack.setTag(tag);
         return stack;
     }
@@ -62,13 +62,13 @@ public class PlayerHeadUtil {
     public static String getSkullOwner(ItemStack stack) {
         if (stack.getItem() == Items.PLAYER_HEAD && stack.hasTag()) {
             String string = null;
-            CompoundTag compoundTag = stack.getTag();
+            NbtCompound compoundTag = stack.getTag();
             assert compoundTag != null;
             if (compoundTag.getString(OWNER).isEmpty()) {
                 if (compoundTag.contains(OWNER, 8)) {
                     string = compoundTag.getString(OWNER);
                 } else if (compoundTag.contains(OWNER, 10)) {
-                    CompoundTag compoundTag2 = compoundTag.getCompound(OWNER);
+                    NbtCompound compoundTag2 = compoundTag.getCompound(OWNER);
                     if (compoundTag2.contains("Name", 8)) {
                         string = compoundTag2.getString("Name");
                     }
