@@ -4,6 +4,7 @@
   "package": "com.forpleuvoir.suika.server.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "ItemStackMixin",
     "LivingEntityMixin",
     "MinecraftServerMixin",
     "ServerPlayerEntityMixin",
