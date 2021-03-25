@@ -15,7 +15,9 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.forpleuvoir.suika.server.Suika"
+    ],
+    "server": [
+      "com.forpleuvoir.suika.server.SuikaServer"
     ]
   },
   "mixins": [

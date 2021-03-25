@@ -1,6 +1,6 @@
 package com.forpleuvoir.suika.server.data;
 
-import com.forpleuvoir.suika.server.Suika;
+import com.forpleuvoir.suika.server.SuikaServer;
 import com.forpleuvoir.suika.server.util.ReflectionUtils;
 import com.forpleuvoir.suikalib.util.FileUtil;
 import com.forpleuvoir.suikalib.util.JsonUtil;
@@ -54,12 +54,12 @@ public class WarpPoint {
             file = new File(filePath, "warp_point.json");
             load();
         } catch (Exception e) {
-            Suika.LOGGER.warn("suika mod warp_point load failed...");
+            SuikaServer.LOGGER.warn("suika mod warp_point load failed...");
             if (!file.exists()) {
                 try {
                     createFile();
                 } catch (IOException ioException) {
-                    Suika.LOGGER.warn("suika mod warp_point create failed...");
+                    SuikaServer.LOGGER.warn("suika mod warp_point create failed...");
                     ioException.printStackTrace();
                 }
             }
@@ -112,7 +112,7 @@ public class WarpPoint {
         try {
             FileUtil.writeFile(file, JsonUtil.gson.toJson(json), false);
         } catch (IOException e) {
-            Suika.LOGGER.warn("suika mod warp_point file write failed...");
+            SuikaServer.LOGGER.warn("suika mod warp_point file write failed...");
         }
     }
 

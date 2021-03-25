@@ -1,6 +1,6 @@
 package com.forpleuvoir.suika.server.mixin;
 
-import com.forpleuvoir.suika.server.Suika;
+import com.forpleuvoir.suika.server.SuikaServer;
 import com.forpleuvoir.suika.server.data.Tpa;
 import com.forpleuvoir.suika.server.data.WarpPoint;
 import com.forpleuvoir.suika.server.util.ReflectionUtils;
@@ -26,7 +26,7 @@ public abstract class MinecraftServerMixin {
 
     @Inject(method = "startServer", at = @At("RETURN"))
     private static void startServer(Function<Thread, CallbackI.S> serverFactory, CallbackInfoReturnable<MinecraftServer> returnable) {
-        Suika.LOGGER.info("suika mod server mixin...");
+        SuikaServer.LOGGER.info("suika mod server mixin...");
         try {
             LevelStorage.Session session = (LevelStorage.Session) ReflectionUtils.getPrivateFieldValueByType(returnable.getReturnValue(), MinecraftServer.class, LevelStorage.Session.class, 0);
             WarpPoint.initialize(session);
