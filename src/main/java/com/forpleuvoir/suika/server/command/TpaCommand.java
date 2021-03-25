@@ -12,7 +12,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
 /**
@@ -24,7 +23,7 @@ import net.minecraft.util.Formatting;
  */
 
 public class TpaCommand {
-    private static final SimpleCommandExceptionType tpaException = new SimpleCommandExceptionType(new TranslatableText("如蜜传如蜜啊"));
+    private static final SimpleCommandExceptionType tpaException = new SimpleCommandExceptionType(new LiteralText("如蜜传如蜜啊"));
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("tpa")
@@ -58,7 +57,7 @@ public class TpaCommand {
                                                         .withColor(Formatting.GREEN)
                                         )),
                 sender.getUuid());
-        source.sendFeedback(new TranslatableText("请求已发送"), false);
+        source.sendFeedback(new LiteralText("请求已发送"), false);
         return 1;
     }
 
@@ -85,7 +84,7 @@ public class TpaCommand {
                                                         .withColor(Formatting.GREEN)
                                         )),
                 sender.getUuid());
-        source.sendFeedback(new TranslatableText("请求已发送"), false);
+        source.sendFeedback(new LiteralText("请求已发送"), false);
         return 1;
     }
 

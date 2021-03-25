@@ -26,7 +26,7 @@ import java.util.Set;
  */
 
 public class WarpCommand {
-    private static final SimpleCommandExceptionType warpException = new SimpleCommandExceptionType(new TranslatableText("传送点不存在"));
+    private static final SimpleCommandExceptionType warpException = new SimpleCommandExceptionType(new LiteralText("传送点不存在"));
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         dispatcher.register(CommandManager.literal("warp")
@@ -63,9 +63,9 @@ public class WarpCommand {
         ServerPlayerEntity player = source.getPlayer();
         String arg = StringArgumentType.getString(context, "warp");
         if (WarpPoint.warp(player, arg))
-            source.sendFeedback(new TranslatableText("将玩家")
+            source.sendFeedback(new LiteralText("将玩家")
                     .append(new LiteralText(" §b" + player.getEntityName()))
-                    .append(new TranslatableText("传送到"))
+                    .append(new LiteralText("传送到"))
                     .append(new LiteralText(" §b" + arg)), false);
         else {
             throw warpException.create();
@@ -88,9 +88,12 @@ public class WarpCommand {
 
     private static int warps(CommandContext<ServerCommandSource> context) {
         ServerCommandSource source = context.getSource();
-        BaseText text = new TranslatableText("世界传送点 : ");
-        WarpPoint.warpPoints.keySet().forEach(e -> text.append(e).append(","));
-        source.sendFeedback(text, false);
+        BaseText text = new LiteralText("世界传送点 : ");
+        if (!WarpPoint.warpPoints.keySet().isEmpty()) {
+            WarpPoint.warpPoints.keySet().forEach(e -> text.append(e).append(","));
+            source.sendFeedback(text, false);
+        }
+        source.sendFeedback(new LiteralText("当前世界没有传送点"), false);
         return 1;
     }
 }
